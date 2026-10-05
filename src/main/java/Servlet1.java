@@ -61,7 +61,7 @@ public class Servlet1 extends HttpServlet {
 			out.print("<a href='Servlet2'>visit</a>");
 			out.print("<br>");
 			out.print("<a href='Logout'>Cerrar sesión</a>");
-
+			out.print(scriptRecarga());
 			out.close();
 
 		} catch (Exception e) {
@@ -76,7 +76,35 @@ public class Servlet1 extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(request, response);
-	}
+		response.setContentType("text/html;charset=UTF-8");
+		
+		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+		response.setHeader("Pragma", "no-cache");
+		response.setDateHeader("Expires", 0);
+		
+		HttpSession vieja = request.getSession(false);
+		if (vieja != null) {
+			vieja.invalidate();
+		}
+		
+		String n = request.getParameter("userName");
+		
+		HttpSession session = request.getSession(true);
+		session.setAttribute("uname", n);
+ 
 
+		response.sendRedirect("Servlet1");
+		
+	}
+	
+	static String scriptRecarga() {
+		return "<script>"
+				+ "window.addEventListener('pageshow', function (e) {"
+				+ "  var nav = performance.getEntriesByType('navigation')[0];"
+				+ "  if (e.persisted || (nav && nav.type === 'back_forward')) {"
+				+ "    location.reload();"
+				+ "  }"
+				+ "});"
+				+ "</script>";
+	}
 }

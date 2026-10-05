@@ -56,7 +56,7 @@ public class Servlet2 extends HttpServlet {
 			out.print("Hello " + n);
 			out.print("<br>");
 			out.print("<a href='Logout'>Cerrar sesión</a>");
-
+			out.print(Servlet1.scriptRecarga());
 			out.close();
 
 		} catch (Exception e) {
